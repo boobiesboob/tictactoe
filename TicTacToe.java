@@ -5,10 +5,11 @@ public class TicTacToe {
     public static char[][] battlefield = new char[][]{{'_', '_', '_'}, {'_', '_', '_'}, {'_', '_', '_'}};
     public static String playerName1 = "";
     public static String playerName2 = "";
-    public static int player = 1;
-    public static char X_SYMBOL = 'X';
-    public static char O_SYMBOL = 'O';
+    public static char stone = '\u0000';
+    public static boolean swappedStone = false;
+    public static boolean swappedPlayer = false;
     public static int moveCounter = battlefield.length;
+
     public static void printLogo() {
         System.out.println("_  _  _   TIC");
         System.out.println("_  _  _    TAC");
@@ -33,13 +34,34 @@ public class TicTacToe {
         playerName2 = scn.nextLine();
     }
 
+    public static String swapPlayers() {
+        String name = (swappedPlayer == false) ? playerName1 : playerName2;
+        swappedPlayer = !swappedPlayer;
+        return name;
+    }
+
+    public static char swapStone() {
+        stone = (swappedStone == false) ? 'X' : 'O';
+        swappedStone = !swappedStone;
+        return stone;
+    }
+
+    public static boolean isFieldOccupied(int x, int y) {
+        return (battlefield[x][y] != '_') ? false : true;
+    }
+
     public static void readMove() {
-        System.out.print("your turn, " + playerName1 + "\n");
-        System.out.print("print line number: ");
-        int x = scn.nextInt();
-        System.out.print("print column number: ");
-        int y = scn.nextInt();
-        battlefield[x-1][y-1] = X_SYMBOL;
+        System.out.print("your turn, " + swapPlayers() + "\n");
+        do {
+            System.out.print("print line number: ");
+            int x = scn.nextInt();
+            System.out.print("print column number: ");
+            int y = scn.nextInt();
+            battlefield[x - 1][y - 1] = swapStone();
+
+            moveCounter--;
+        } while (moveCounter > 0);
+
     }
 
     public static void printPlayer() {
